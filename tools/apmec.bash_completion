@@ -1,0 +1,27 @@
+_apmec_opts="" # lazy init
+_apmec_flags="" # lazy init
+_apmec_opts_exp="" # lazy init
+_apmec()
+{
+	local cur prev nbc cflags
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+	if [ "x$_apmec_opts" == "x" ] ; then
+		nbc="`apmec bash-completion`"
+		_apmec_opts="`echo "$nbc" | sed -e "s/--[a-z0-9_-]*//g" -e "s/\s\s*/ /g"`"
+		_apmec_flags="`echo " $nbc" | sed -e "s/ [^-][^-][a-z0-9_-]*//g" -e "s/\s\s*/ /g"`"
+		_apmec_opts_exp="`echo "$_apmec_opts" | sed -e "s/\s/|/g"`"
+	fi
+
+	if [[ " ${COMP_WORDS[@]} " =~ " "($_apmec_opts_exp)" " && "$prev" != "help" ]] ; then
+		COMPLETION_CACHE=~/.apmecclient/*/*-cache
+		cflags="$_apmec_flags "$(cat $COMPLETION_CACHE 2> /dev/null | tr '\n' ' ')
+		COMPREPLY=($(compgen -W "${cflags}" -- ${cur}))
+	else
+		COMPREPLY=($(compgen -W "${_apmec_opts}" -- ${cur}))
+	fi
+	return 0
+}
+complete -F _apmec apmec
