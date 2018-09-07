@@ -17,9 +17,9 @@
 
 import yaml
 
+from apmecclient.apmec import v1_0 as apmecV10
 from apmecclient.common import exceptions
 from apmecclient.i18n import _
-from apmecclient.apmec import v1_0 as apmecV10
 
 
 _MEA = 'mea'
@@ -104,15 +104,15 @@ class CreateMEA(apmecV10.CreateCommand):
         apmec_client.format = parsed_args.request_format
         if parsed_args.vim_name:
                 _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                              'vim',
-                                                              parsed_args.
-                                                              vim_name)
+                                                             'vim',
+                                                             parsed_args.
+                                                             vim_name)
                 parsed_args.vim_id = _id
         if parsed_args.mead_name:
                 _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                              'mead',
-                                                              parsed_args.
-                                                              mead_name)
+                                                             'mead',
+                                                             parsed_args.
+                                                             mead_name)
                 parsed_args.mead_id = _id
         elif parsed_args.mead_template:
             with open(parsed_args.mead_template) as f:
@@ -132,8 +132,8 @@ class CreateMEA(apmecV10.CreateCommand):
             except yaml.YAMLError as e:
                 raise exceptions.InvalidInput(e)
         apmecV10.update_dict(parsed_args, body[self.resource],
-                              ['tenant_id', 'name', 'description',
-                               'mead_id', 'vim_id'])
+                             ['tenant_id', 'name', 'description',
+                              'mead_id', 'vim_id'])
         return body
 
 
@@ -163,7 +163,7 @@ class UpdateMEA(apmecV10.UpdateCommand):
                 raise exceptions.InvalidInput(e)
         if parsed_args.config:
             config = parsed_args.config
-            if isinstance(config, str) or isinstance(config, unicode):
+            if isinstance(config, str) or isinstance(config, unicode):   # noqa
                 config_str = parsed_args.config.decode('unicode_escape')
                 try:
                     config = yaml.load(config_str, Loader=yaml.SafeLoader)
@@ -210,8 +210,8 @@ class ListMEAResources(apmecV10.ListCommand):
         apmec_client.format = parsed_args.request_format
         if self.allow_names:
             _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                          self.resource,
-                                                          parsed_args.id)
+                                                         self.resource,
+                                                         parsed_args.id)
         else:
             _id = parsed_args.id
 
@@ -225,7 +225,7 @@ class ListMEAResources(apmecV10.ListCommand):
         apmec_client.format = parsed_args.request_format
         _extra_values = apmecV10.parse_args_to_dict(self.values_specs)
         apmecV10._merge_args(self, parsed_args, _extra_values,
-                              self.values_specs)
+                             self.values_specs)
         search_opts = self.args2search_opts(parsed_args)
         search_opts.update(_extra_values)
         if self.pagination_support:
@@ -292,9 +292,9 @@ class ScaleMEA(apmecV10.ApmecCommand):
             apmec_client = self.get_client()
             apmec_client.format = parsed_args.request_format
             _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                          'mea',
-                                                          parsed_args.
-                                                          mea_name)
+                                                         'mea',
+                                                         parsed_args.
+                                                         mea_name)
             parsed_args.mea_id = _id
 
         args['mea_id'] = parsed_args.mea_id

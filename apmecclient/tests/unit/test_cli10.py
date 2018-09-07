@@ -24,11 +24,12 @@ import six.moves.urllib.parse as urlparse
 import sys
 import testtools
 
+from apmecclient.apmec import v1_0 as apmecV1_0
+from apmecclient.apmec.v1_0 import ApmecCommand
 from apmecclient.common import constants
 from apmecclient.common import exceptions
 from apmecclient import shell
-from apmecclient.apmec import v1_0 as apmecV1_0
-from apmecclient.apmec.v1_0 import ApmecCommand
+
 from apmecclient.tests.unit import test_utils
 from apmecclient.v1_0 import client
 
@@ -240,7 +241,7 @@ class CLITestV10Base(testtools.TestCase):
         resstr = self.client.serialize(ress)
         # url method body
         resource_plural = apmecV1_0._get_resource_plural(resource,
-                                                          self.client)
+                                                         self.client)
         path = getattr(self.client, resource_plural + "_path")
         # Work around for LP #1217791. XML deserializer called from
         # MyComparator does not decodes XML string correctly.
@@ -688,8 +689,8 @@ class CLITestV10ExceptionHandler(CLITestV10Base):
             error_content=None):
         if error_content is None:
             error_content = {'ApmecError': {'type': error_type,
-                                             'message': error_msg,
-                                             'detail': error_detail}}
+                                            'message': error_msg,
+                                            'detail': error_detail}}
 
         e = self.assertRaises(expected_exception,
                               client.exception_handler_v10,

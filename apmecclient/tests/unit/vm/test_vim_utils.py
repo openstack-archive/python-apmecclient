@@ -17,8 +17,9 @@
 from mock import sentinel
 import testtools
 
-from apmecclient.common import exceptions
 from apmecclient.apmec.v1_0.meo import vim_utils
+
+from apmecclient.common import exceptions
 
 
 class TestVIMUtils(testtools.TestCase):

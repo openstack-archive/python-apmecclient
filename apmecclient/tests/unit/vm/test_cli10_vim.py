@@ -16,9 +16,10 @@
 
 import sys
 
+from apmecclient.apmec.v1_0.meo import vim
 from apmecclient.common import exceptions
 from apmecclient.common import utils
-from apmecclient.apmec.v1_0.meo import vim
+
 from apmecclient.tests.unit import test_cli10
 
 API_VERSION = "1.0"

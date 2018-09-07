@@ -71,19 +71,19 @@ def exception_handler_v10(status_code, error_content):
                     status_code=status_code, message=error_message)
         else:
             raise exceptions.ApmecClientException(status_code=status_code,
-                                                   message=error_dict)
+                                                  message=error_dict)
     else:
         message = None
         if isinstance(error_content, dict):
             message = error_content.get('message')
         if message:
             raise exceptions.ApmecClientException(status_code=status_code,
-                                                   message=message)
+                                                  message=message)
 
     # If we end up here the exception was not a apmec error
     msg = "%s-%s" % (status_code, error_content)
     raise exceptions.ApmecClientException(status_code=status_code,
-                                           message=msg)
+                                          message=msg)
 
 
 class APIParamsCall(object):
@@ -344,6 +344,12 @@ class Client(ClientBase):
     vims_path = '/vims'
     vim_path = '/vims/%s'
 
+    mecads_path = '/mecads'
+    mecad_path = '/mecads/%s'
+
+    mecas_path = '/mecas'
+    meca_path = '/mecas/%s'
+
     events_path = '/events'
     event_path = '/events/%s'
 
@@ -368,6 +374,7 @@ class Client(ClientBase):
 
     _MEAD = "mead"
     _MESD = "mesd"
+    _MECAD = "mecad"
 
     @APIParamsCall
     def list_meads(self, retrieve_all=True, **_params):
@@ -496,12 +503,12 @@ class Client(ClientBase):
     @APIParamsCall
     def list_mesds(self, retrieve_all=True, **_params):
         mesds_dict = self.list(self._MESD + 's',
-                              self.mesds_path,
-                              retrieve_all,
-                              **_params)
+                               self.mesds_path,
+                               retrieve_all,
+                               **_params)
         for mesd in mesds_dict['mesds']:
             if 'description' in mesd.keys() and \
-                            len(mesd['description']) > DEFAULT_DESC_LENGTH:
+                    len(mesd['description']) > DEFAULT_DESC_LENGTH:
                 mesd['description'] = mesd['description'][:DEFAULT_DESC_LENGTH]
                 mesd['description'] += '...'
         return mesds_dict
@@ -525,9 +532,9 @@ class Client(ClientBase):
         for mes in mess['mess']:
             error_reason = mes.get('error_reason', None)
             if error_reason and \
-                            len(error_reason) > DEFAULT_ERROR_REASON_LENGTH:
-                mes['error_reason'] = error_reason[
-                                     :DEFAULT_ERROR_REASON_LENGTH]
+                    len(error_reason) > DEFAULT_ERROR_REASON_LENGTH:
+                mes['error_reason'] =\
+                    error_reason[:DEFAULT_ERROR_REASON_LENGTH]
                 mes['error_reason'] += '...'
         return mess
 
@@ -542,3 +549,62 @@ class Client(ClientBase):
     @APIParamsCall
     def delete_mes(self, mes):
         return self.delete(self.mes_path % mes)
+
+    @APIParamsCall
+    def update_mes(self, mes, body):
+        return self.put(self.mes_path % mes, body=body)
+
+    @APIParamsCall
+    def list_mecads(self, retrieve_all=True, **_params):
+        mecads_dict = self.list(self._MECAD + 's',
+                                self.mecads_path,
+                                retrieve_all,
+                                **_params)
+        for mecad in mecads_dict['mecads']:
+            if 'description' in mecad.keys() and \
+                    len(mecad['description']) > DEFAULT_DESC_LENGTH:
+                mecad['description'] =\
+                    mecad['description'][:DEFAULT_DESC_LENGTH]
+                mecad['description'] += '...'
+        return mecads_dict
+
+    @APIParamsCall
+    def show_mecad(self, mecad, **_params):
+        return self.get(self.mecad_path % mecad,
+                        params=_params)
+
+    @APIParamsCall
+    def create_mecad(self, body):
+        return self.post(self.mecads_path, body)
+
+    @APIParamsCall
+    def delete_mecad(self, mecad):
+        return self.delete(self.mecad_path % mecad)
+
+    @APIParamsCall
+    def list_mecas(self, retrieve_all=True, **_params):
+        mecas = self.list('mecas', self.mecas_path, retrieve_all, **_params)
+        for meca in mecas['mecas']:
+            error_reason = meca.get('error_reason', None)
+            if error_reason and \
+                    len(error_reason) > DEFAULT_ERROR_REASON_LENGTH:
+                meca['error_reason'] =\
+                    error_reason[:DEFAULT_ERROR_REASON_LENGTH]
+                meca['error_reason'] += '...'
+        return mecas
+
+    @APIParamsCall
+    def show_meca(self, meca, **_params):
+        return self.get(self.meca_path % meca, params=_params)
+
+    @APIParamsCall
+    def create_meca(self, body):
+        return self.post(self.mecas_path, body=body)
+
+    @APIParamsCall
+    def delete_meca(self, meca):
+        return self.delete(self.meca_path % meca)
+
+    @APIParamsCall
+    def update_meca(self, meca, body):
+        return self.put(self.meca_path % meca, body=body)

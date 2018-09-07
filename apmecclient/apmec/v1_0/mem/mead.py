@@ -20,10 +20,9 @@ from __future__ import print_function
 from oslo_serialization import jsonutils
 import yaml
 
+from apmecclient.apmec import v1_0 as apmecV10
 from apmecclient.common import exceptions
 from apmecclient.i18n import _
-from apmecclient.apmec import v1_0 as apmecV10
-
 
 _MEAD = "mead"
 
@@ -88,7 +87,7 @@ class CreateMEAD(apmecV10.CreateCommand):
                 raise exceptions.InvalidInput("mead file is empty")
             body[self.resource]['attributes'] = {'mead': mead}
         apmecV10.update_dict(parsed_args, body[self.resource],
-                              ['tenant_id', 'name', 'description'])
+                             ['tenant_id', 'name', 'description'])
         return body
 
 

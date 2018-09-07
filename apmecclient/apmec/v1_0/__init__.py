@@ -74,7 +74,7 @@ def _find_resourceid_by_name(client, resource, name):
     info = data[collection]
     if len(info) > 1:
         raise exceptions.ApmecClientNoUniqueMatch(resource=resource,
-                                                   name=name)
+                                                  name=name)
     elif len(info) == 0:
         not_found_message = (_("Unable to find %(resource)s with name "
                                "'%(name)s'") %
@@ -349,7 +349,7 @@ class ApmecCommandMeta(abc.ABCMeta):
             cls_dict['log'] = logging.getLogger(
                 cls_dict['__module__'] + '.' + name)
         return super(ApmecCommandMeta, cls).__new__(cls,
-                                                     name, bases, cls_dict)
+                                                    name, bases, cls_dict)
 
 
 @six.add_metaclass(ApmecCommandMeta)
