@@ -29,8 +29,8 @@ def args2body_vim(config_param, vim):
                               config_param.pop('project_domain_name', '')}
     if not vim['vim_project']['name']:
         raise exceptions.ApmecClientException(message='Project name '
-                                                       'must be specified',
-                                               status_code=404)
+                                              'must be specified',
+                                              status_code=404)
     vim['auth_cred'] = {'username': config_param.pop('username', ''),
                         'password': config_param.pop('password', ''),
                         'user_domain_name':
