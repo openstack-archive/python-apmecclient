@@ -47,8 +47,10 @@ from apmecclient.common import utils
 from apmecclient.i18n import _
 from apmecclient.apmec.v1_0.events import events
 from apmecclient.apmec.v1_0 import extension
-from apmecclient.apmec.v1_0.meo import mes
-from apmecclient.apmec.v1_0.meo import mesd
+from apmecclient.apmec.v1_0.meso import mes
+from apmecclient.apmec.v1_0.meso import mesd
+from apmecclient.apmec.v1_0.meo import meca
+from apmecclient.apmec.v1_0.meo import mecad
 from apmecclient.apmec.v1_0.meo import vim
 from apmecclient.apmec.v1_0.mem import mea
 from apmecclient.apmec.v1_0.mem import mead
@@ -145,6 +147,19 @@ COMMAND_V1 = {
     'mes-list': mes.ListMES,
     'mes-delete': mes.DeleteMES,
     'mes-show': mes.ShowMES,
+    'mes-update': mes.UpdateMES,
+
+    'mecad-create': mecad.CreateMECAD,
+    'mecad-list': mecad.ListMECAD,
+    'mecad-delete': mecad.DeleteMECAD,
+    'mecad-show': mecad.ShowMECAD,
+    'mecad-template-show': mecad.ShowTemplateMECAD,
+
+    'meca-create': meca.CreateMECA,
+    'meca-list': meca.ListMECA,
+    'meca-delete': meca.DeleteMECA,
+    'meca-show': meca.ShowMECA,
+    'meca-update': meca.UpdateMECA
 
 }
 
