@@ -1,20 +1,25 @@
-# Licensed under the Apache License, Version 2.0 (the "License"); you may
-# not use this file except in compliance with the License. You may obtain
-# a copy of the License at
 #
-#      http://www.apache.org/licenses/LICEMESE-2.0
+# Copyright 2013 Intel Corporation
+# All Rights Reserved.
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIOMES OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
 
 import yaml
 
+from apmecclient.apmec import v1_0 as apmecV10
 from apmecclient.common import exceptions
 from apmecclient.i18n import _
-from apmecclient.apmec import v1_0 as apmecV10
 
 
 _MES = 'mes'
@@ -82,15 +87,15 @@ class CreateMES(apmecV10.CreateCommand):
         apmec_client.format = parsed_args.request_format
         if parsed_args.vim_name:
                 _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                              'vim',
-                                                              parsed_args.
-                                                              vim_name)
+                                                             'vim',
+                                                             parsed_args.
+                                                             vim_name)
                 parsed_args.vim_id = _id
         if parsed_args.mesd_name:
                 _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                              'mesd',
-                                                              parsed_args.
-                                                              mesd_name)
+                                                             'mesd',
+                                                             parsed_args.
+                                                             mesd_name)
                 parsed_args.mesd_id = _id
         elif parsed_args.mesd_template:
             with open(parsed_args.mesd_template) as f:
@@ -112,8 +117,8 @@ class CreateMES(apmecV10.CreateCommand):
             except yaml.YAMLError as e:
                 raise exceptions.InvalidInput(e)
         apmecV10.update_dict(parsed_args, body[self.resource],
-                              ['tenant_id', 'name', 'description',
-                               'mesd_id', 'vim_id'])
+                             ['tenant_id', 'name', 'description',
+                              'mesd_id', 'vim_id'])
         return body
 
 
@@ -122,3 +127,37 @@ class DeleteMES(apmecV10.DeleteCommand):
 
     resource = _MES
     deleted_msg = {'mes': 'delete initiated'}
+
+
+class UpdateMES(apmecV10.UpdateCommand):
+    """Update a given MES."""
+
+    resource = _MES
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            '--mesd-template',
+            help=_('MESD file to update MES')
+        )
+
+    def args2body(self, parsed_args):
+        args = {}
+        body = {self.resource: args}
+
+        apmec_client = self.get_client()
+        apmec_client.format = parsed_args.request_format
+
+        if parsed_args.mesd_template:
+            with open(parsed_args.mesd_template) as f:
+                template = f.read()
+            try:
+                args['mesd_template'] = yaml.load(
+                    template, Loader=yaml.SafeLoader)
+            except yaml.YAMLError as e:
+                raise exceptions.InvalidInput(e)
+            if not args['mesd_template']:
+                raise exceptions.InvalidInput('The mesd template is empty')
+
+        apmecV10.update_dict(parsed_args, body[self.resource],
+                             ['tenant_id'])
+        return body

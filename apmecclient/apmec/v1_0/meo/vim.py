@@ -18,10 +18,11 @@ import yaml
 
 from oslo_utils import strutils
 
-from apmecclient.common import exceptions
-from apmecclient.i18n import _
 from apmecclient.apmec import v1_0 as apmecV10
 from apmecclient.apmec.v1_0.meo import vim_utils
+from apmecclient.common import exceptions
+from apmecclient.i18n import _
+
 
 _VIM = "vim"
 
@@ -77,14 +78,14 @@ class CreateVIM(apmecV10.CreateCommand):
             auth_url = config_param.pop('auth_url')
         except KeyError:
             raise exceptions.ApmecClientException(message='Auth URL must be '
-                                                           'specified',
-                                                   status_code=404)
+                                                  'specified',
+                                                  status_code=404)
         vim_obj['auth_url'] = vim_utils.validate_auth_url(auth_url).geturl()
         vim_obj['type'] = config_param.pop('type', 'openstack')
         vim_utils.args2body_vim(config_param, vim_obj)
         apmecV10.update_dict(parsed_args, body[self.resource],
-                              ['tenant_id', 'name', 'description',
-                               'is_default'])
+                             ['tenant_id', 'name', 'description',
+                              'is_default'])
         return body
 
 
@@ -125,8 +126,8 @@ class UpdateVIM(apmecV10.UpdateCommand):
         if config_param is not None:
             vim_utils.args2body_vim(config_param, vim_obj)
         apmecV10.update_dict(parsed_args, body[self.resource],
-                              ['tenant_id', 'name', 'description',
-                               'is_default'])
+                             ['tenant_id', 'name', 'description',
+                              'is_default'])
         return body
 
 

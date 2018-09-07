@@ -16,9 +16,9 @@
 
 """Manage access to the clients, including authenticating when needed.
 """
+from apmecclient.apmec import client as apmec_client
 
 from apmecclient import client
-from apmecclient.apmec import client as apmec_client
 
 
 class ClientCache(object):
