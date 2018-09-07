@@ -1,0 +1,8 @@
+Code-Review+2: Tung Doan <doantungbk.203@gmail.com>
+Workflow+1: Tung Doan <doantungbk.203@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 07 Sep 2018 22:30:09 +0000
+Reviewed-on: https://review.openstack.org/600844
+Project: openstack/python-apmecclient
+Branch: refs/heads/master
