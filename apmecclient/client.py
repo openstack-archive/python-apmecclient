@@ -14,12 +14,10 @@
 #    under the License.
 #
 
-try:
-    import json
-except ImportError:
-    import simplejson as json
 import logging
 import os
+
+from oslo_serialization import jsonutils
 
 from keystoneclient import access
 from keystoneclient import adapter
@@ -209,14 +207,14 @@ class HTTPClient(object):
 
         token_url = self.auth_url + "/tokens"
         resp, resp_body = self._cs_request(token_url, "POST",
-                                           body=json.dumps(body),
+                                           body=jsonutils.dumps(body),
                                            content_type="application/json",
                                            allow_redirects=True)
         if resp.status_code != 200:
             raise exceptions.Unauthorized(message=resp_body)
         if resp_body:
             try:
-                resp_body = json.loads(resp_body)
+                resp_body = jsonutils.loads(resp_body)
             except ValueError:
                 pass
         else:
@@ -252,7 +250,7 @@ class HTTPClient(object):
             self.authenticate()
             return self.endpoint_url
 
-        body = json.loads(body)
+        body = jsonutils.loads(body)
         for endpoint in body.get('endpoints', []):
             if (endpoint['type'] == 'mec-orchestration' and
                     endpoint.get('region') == self.region_name):
