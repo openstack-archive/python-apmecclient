@@ -1,7 +1,0 @@
-[run]
-branch = True
-source = apmecclient
-omit = apmecclient/openstack/*,apmecclient/tests/*
-
-[report]
-ignore_errors = True
